@@ -1,0 +1,23 @@
+http:
+  routers:
+    homeassistant:
+      entryPoints:
+      - https
+      rule: "Host(`homeassistant.example.com`)"
+      service: homeassistant
+
+  services:
+    homeassistant:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.1.65:8123"
+
+
+  middlewares:
+    forward-auth:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://authelia.example.com"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups"

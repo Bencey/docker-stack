@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:latest
+    ports:
+      - "80:80"
+      - "8080:8080" # traefik dashboard
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/data/config/traefikv2:/etc/traefik
+    networks:
+      - traefik_public
+    deploy:
+      labels:
+        - "traefik.docker.network=traefik_public"
+        - "traefik.http.routers.api.rule=HostHeader(`traefik.example.com`)"
+        - "traefik.http.routers.api.service=api@internal"
+        - "traefik.http.services.api.loadbalancer.server.port=9999"
+        - "traefik.http.routers.api.middlewares=forward-auth@file"
+
+networks:
+  traefik_public:
+    external: true
