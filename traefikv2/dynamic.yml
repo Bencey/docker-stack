@@ -1,20 +1,28 @@
 http:
+  serversTransports:
+    mytransport:
+      insecureSkipVerify: true
+
+  # Put my proxmox instance behind traefikv2 (This is mostly so they can have a domainname)
   routers:
-    homeassistant:
+    proxmox:
       entryPoints:
       - https
-      rule: "Host(`homeassistant.example.com`)"
-      service: homeassistant
+      rule: "Host(`proxmox.example.com`)"
+      service: proxmox
 
   services:
-    homeassistant:
+    proxmox:
       loadBalancer:
+        serversTransport: mytransport
         servers:
-        - url: "http://192.168.1.65:8123"
+        - url: "https://192.168.1.10:8006"
 
 
+  # Authelia Middleware
   middlewares:
     forward-auth:
+
       forwardAuth:
         address: "http://authelia:9091/api/verify?rd=https://authelia.example.com"
         trustForwardHeader: true

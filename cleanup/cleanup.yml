@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  system-prune:
+    image: docker:latest
+    command: docker system prune --all --force
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+     - default
+    logging:
+      driver: json-file
+    deploy:
+      mode: global
+      restart_policy:
+        delay: 86400s
+networks:
+  default:
+    driver: overlay

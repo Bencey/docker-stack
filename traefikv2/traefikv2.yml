@@ -4,21 +4,40 @@ services:
   traefik:
     image: traefik:latest
     ports:
-      - "80:80"
-      - "8080:8080" # traefik dashboard
-      - "443:443"
+      - "80:80" #http
+      - "8080:8080" # traefik dashboard 
+      - "443:443" # HTTPS
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/data/config/traefikv2:/etc/traefik
     networks:
       - traefik_public
     deploy:
+      placement:
+        constraints: [node.role == manager] # Only run this service on manager nodes
       labels:
         - "traefik.docker.network=traefik_public"
-        - "traefik.http.routers.api.rule=HostHeader(`traefik.example.com`)"
+        - "traefik.http.routers.api.rule=HostHeader(`traefik.example.com`)" # URL Where traefik can be accessed from 
         - "traefik.http.routers.api.service=api@internal"
-        - "traefik.http.services.api.loadbalancer.server.port=9999"
-        - "traefik.http.routers.api.middlewares=forward-auth@file"
+        - "traefik.http.services.api.loadbalancer.server.port=8080" 
+        - "traefik.http.routers.api.middlewares=forward-auth@file" # Authelia authentication
+
+
+ # DNS Updator
+ # This service updates my DNS records if my public IP changes  
+  cf-ddns:
+    container_name: cf-ddns
+    image: oznu/cloudflare-ddns:latest
+    restart: always
+    environment:
+      - API_KEY=API KEY # Cloudflare API key from https://dash.cloudflare.com/profile/api-tokens
+      - ZONE=example.com # Domain Name
+      - PROXIED=true # Is the service proxied through cloudflare
+      - SUBDOMAIN=traefik # Subdomain I want to update 
+      - RRTYPE=A # What DNS type it is
+      - DELETE_ON_STOP=false # When the service isnt running should it get deleted
+      - DNS_SERVER=1.1.1.1 # Cloudflare DNS
+
 
 networks:
   traefik_public:

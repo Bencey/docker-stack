@@ -3,13 +3,14 @@ version: "3.4"
 services:
   bitwarden:
     image: bitwardenrs/server
+    env_file: /var/data/config/bitwarden/bitwarden.env
     volumes:
       - /var/data/bitwarden:/data/:rw
     networks:
         - traefik_public
     deploy:
       placement:
-        constraints: [node.hostname == node1]
+        constraints: [node.hostname == node1] # Only run on node1
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.example.com`)"

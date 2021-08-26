@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  munin:
+    image: occitech/munin
+    env_file: /var/data/config/munin/munin.env
+    networks:
+      - traefik_public
+      - internal
+    volumes:
+      - /var/data/munin/log:/var/log/munin
+      - /var/data/munin/lib:/var/lib/munin
+      - /var/data/munin/run:/var/run/munin
+      - /var/data/munin/cache:/var/cache/munin
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.munin.rule=Host(`munin.example.com`)"
+        - "traefik.http.services.munin.loadbalancer.server.port=8080"
+        - "traefik.http.routers.munin.entrypoints=https"
+        - "traefik.http.routers.munin.middlewares=forward-auth@file"
+
+networks:
+  traefik_public:
+    external: true
+  internal:
+    driver: overlay
+    ipam:
+      config:
+        - subnet: 172.16.24.0/24
