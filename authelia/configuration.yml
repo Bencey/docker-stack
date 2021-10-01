@@ -4,10 +4,11 @@
 
 host: 0.0.0.0
 port: 9091
-log_level: debug
+log_level: warn
 
 jwt_secret: secret
-default_redirection_url: https://authelia.example.com
+default_redirection_url: https://authelia.example.co.nz
+
 totp:
   issuer: authelia.com
   period: 30
@@ -23,10 +24,11 @@ authentication_backend:
       key_length: 32
       salt_length: 32
 
+
 access_control:
   default_policy: one_factor
   rules:
-    - domain: "*.example.com"
+    - domain: "*.example.co.nz"
       policy: one_factor
 
 
@@ -36,7 +38,7 @@ session:
   secret: secret
   expiration: 3600 # 1 hour
   inactivity: 300 # 5 minutes
-  domain: example.com # Should match whatever your root protected domain is
+  domain: example.co.nz # Should match whatever your root protected domain is
 
 regulation:
   max_retries: 3
@@ -44,9 +46,9 @@ regulation:
   ban_time: 300
 
 notifier:
-  # For testing purposes, notifications can be sent in a file. Be sure to map the volume in docker-compose.
   filesystem:
     filename: /config/notification.txt
+
 
 storage:
   local:

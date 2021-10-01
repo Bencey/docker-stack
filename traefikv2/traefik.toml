@@ -11,7 +11,7 @@
 
 [entryPoints.http]
   address = ":80"
-  # Auto redirect to https
+  # Redirect to HTTPS (why wouldn't you?)
   [entryPoints.http.http.redirections.entryPoint]
 #    to = "https"
     scheme = "https"
