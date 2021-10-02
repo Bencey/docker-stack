@@ -9,14 +9,12 @@ services:
     networks:
         - traefik_public
     deploy:
-      placement:
-        constraints: [node.hostname == node1] # Only run on node1
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.example.com`)"
+        - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.example.co.nz`)"
         - "traefik.http.services.bitwarden.loadbalancer.server.port=80"
         - "traefik.http.routers.bitwarden.service=bitwarden"
-        - "traefik.http.routers.bitwarden-websocket.rule=Host(`bitwarden.example.com`) && Path(`/notifications/hub`)"
+        - "traefik.http.routers.bitwarden-websocket.rule=Host(`bitwarden.example.co.nz`) && Path(`/notifications/hub`)"
         - "traefik.http.routers.bitwarden-websocket.service=bitwarden-websocket"
         - "traefik.http.services.bitwarden-websocket.loadbalancer.server.port=3012"
 

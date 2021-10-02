@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+    archivebox:
+        image: archivebox/archivebox
+        command: server --quick-init 0.0.0.0:8000
+#        ports:
+#            - 8000:8000
+        networks:
+          - traefik_public
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Pacific/Auckland
+            - USE_COLOR=True
+            - SHOW_PROGRESS=False
+        deploy:
+          labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.archive.rule=Host(`archive.example.co.nz`)"
+            - "traefik.http.services.archive.loadbalancer.server.port=8000"
+            - "traefik.http.routers.archive.entrypoints=https"
+        volumes:
+          - /var/data/archivebox:/data
+
+
+networks:
+  traefik_public:
+    external: true

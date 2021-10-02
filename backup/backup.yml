@@ -4,14 +4,13 @@ services:
     image: linuxserver/duplicati
     env_file: /var/data/config/backup/backup.env
     deploy:
-      placement:
-        constraints: [node.hostname == node1] # Only run on node1
+      replicas: 1
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.backup.rule=Host(`backup.example.com`)"
+        - "traefik.http.routers.backup.rule=Host(`backup.example.co.nz`)"
         - "traefik.http.services.backup.loadbalancer.server.port=8200"
         - "traefik.http.routers.backup.entrypoints=https"
-        - "traefik.http.routers.backup.middlewares=forward-auth@file" # Authentication
+        - "traefik.http.routers.backup.middlewares=forward-auth@file"
     volumes:
       - /var/data/config/backup:/config
       - /var/data:/source

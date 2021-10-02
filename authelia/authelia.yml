@@ -8,13 +8,11 @@ services:
     networks:
       - traefik_public
     deploy:
-      placement:
-        constraints: [node.hostname == node1]
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.authelia.entrypoints=https"
-        - "traefik.http.routers.authelia.rule=Host(`authelia.example.com`)"
-        - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://authelia.example.com"
+        - "traefik.http.routers.authelia.rule=Host(`authelia.example.co.nz`)"
+        - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://authelia.example.co.nz"
         - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
         - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User, Remote-Groups"
         - "traefik.http.services.authelia.loadbalancer.server.port=9091"
@@ -23,4 +21,3 @@ services:
 networks:
   traefik_public:
     external: true
-

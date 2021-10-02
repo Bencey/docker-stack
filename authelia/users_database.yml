@@ -1,8 +1,8 @@
 users:
-  example:
-    displayname: "Example User"
-    password: "password hash"
-    email: admin@example.com
+  benjamin:
+    displayname: "Benjamin"
+    password: "hashed_pass"
+    email: admin@example.co.nz
     groups:
       - admins
       - dev

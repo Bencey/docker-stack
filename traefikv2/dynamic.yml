@@ -3,13 +3,34 @@ http:
     mytransport:
       insecureSkipVerify: true
 
-  # Put my proxmox instance behind traefikv2 (This is mostly so they can have a domainname)
+
   routers:
-    proxmox:
+    pihole:
       entryPoints:
       - https
-      rule: "Host(`proxmox.example.com`)"
-      service: proxmox
+      rule: "Host(`adblocker.example.co.nz`)"
+      service: pihole
+
+    grafana:
+      entryPoints:
+      - https
+      rule: "Host(`grafana.example.co.nz`)"
+      service: grafana
+
+    monit:
+      entryPoints:
+      - https
+      middlewares:
+        - "forward-auth"
+      rule: "Host(`monitor.example.co.nz`)"
+      service: monit
+
+    nas:
+      entryPoints:
+      - https
+      rule: "Host(`storage.example.co.nz`)"
+      service: nas
+
 
   services:
     proxmox:
@@ -18,13 +39,36 @@ http:
         servers:
         - url: "https://192.168.1.10:8006"
 
+    pihole:
+      loadBalancer:
+        serversTransport: mytransport
+        servers:
+        - url: "http://192.168.1.2"
 
-  # Authelia Middleware
+
+    grafana:
+      loadBalancer:
+        serversTransport: mytransport
+        servers:
+        - url: "http://192.168.1.10:3000"
+
+    monit:
+      loadBalancer:
+        serversTransport: mytransport
+        servers:
+        - url: "http://192.168.1.10/nagios"
+
+    nas:
+      loadBalancer:
+        serversTransport: mytransport
+        servers:
+        - url: "http://192.168.2.16"
+
+
   middlewares:
     forward-auth:
-
       forwardAuth:
-        address: "http://authelia:9091/api/verify?rd=https://authelia.example.com"
+        address: "http://authelia:9091/api/verify?rd=https://authelia.example.co.nz"
         trustForwardHeader: true
         authResponseHeaders:
           - "Remote-User"
