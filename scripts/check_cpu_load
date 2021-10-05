@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Obtains the average CPu usage. and turns into a whole number
+load=$(cat /proc/loadavg | awk '{print $3}'|cut -f 1 -d ".")
+
+
+# If CPU usage is below 30% nagios will report "Ok"
+if (($load <= 30)); then
+                echo "OK - CPU is $load%"
+                exit 0
+        # If CPU usage is above 40% nagios will report "Warning"
+        elif (($load > 40)); then
+                echo "WARNING - CPU Is $load%"
+                exit 1
+        # If CPU usage is above 70% nagios will report "Crtitical"
+        elif (($load > 70)); then
+                echo "CRITICAL - CPU is $load%"
+                exit 2
+        else
+                echo "UNKNOWN - Cannot get load percent for CPU"
+                exit 3
+fi
