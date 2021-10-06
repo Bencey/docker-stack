@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+# Gets the temperature for core0
+# Since there is two CPUs we will need to use tail -1 to grab the temperature for the second CPU
+
+temp=$(sensors | sed -rn 's/.*Core 0:\s+.([0-9]+).*/\1/p' | tail -1)
+
+# If CPU temp is below 50c nagios will report "Ok"
+if (($temp <=50)); then
+                echo "OK - CPU2 is $temp C"
+                exit 0
+        # If CPU temp is above 60c nagios will report "Warning"
+        elif (($temp > 60)); then
+                echo "WARNING - CPU2 Is $temp C"
+                exit 1
+        # If cpu temp is above 70c Nagios will report "Critical"
+        elif (($temp > 70)); then
+                echo "CRITICAL - CPU2 is $temp C"
+                exit 2
+        else
+                echo "UNKNOWN - Cannot get temperature for CPU2"
+                exit 3
+fi
