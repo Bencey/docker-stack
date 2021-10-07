@@ -8,6 +8,7 @@
 | Duplicati      | 172.16.55.0/24  |
 
 
+
 # Docker Node Information
 
 All docker nodes are running as virtual machines with the following specs
@@ -27,3 +28,29 @@ Ubuntu 20.04 Server
 | Node4        | 192.168.2.13  |
 | Node5        | 192.168.2.14  |
 | Node6        | 192.168.2.15  |
+
+
+
+
+
+# Services currently running
+
+Docker Services
+
+- Authelia
+- Duplicati
+- Docker container cleanup
+- Bitwarden
+- Uptime Kuma
+- Portainer
+- Traefik (Version 2)
+
+
+Non Docker Services
+
+- Grafana
+- Proxmox
+- Pihole
+
+
+
