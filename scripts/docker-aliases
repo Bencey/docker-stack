@@ -1,0 +1,20 @@
+# To deploy a stack
+
+dsd(){
+ docker stack deploy "$1" -c /var/data/config/"$1"/"$1".yml
+}
+
+# To remove a stack
+dsr(){
+ docker stack rm "$1"
+}
+
+# To list all stacks
+dsl() {
+ docker stack ls
+}
+
+# To list services inside a stack
+dsp() {
+ docker stack ps "$1"
+}

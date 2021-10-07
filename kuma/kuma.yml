@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma
+    container_name: uptime-kuma
+    volumes:
+      - /var/data/config/kuma:/app/data
+    networks:
+      - traefik_public
+    ports:
+      - 3001:3001
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.kuma.rule=Host(`kuma.example.com`)"
+        - "traefik.http.services.kuma.loadbalancer.server.port=3001"
+
+
+networks:
+  traefik_public:
+    external: true
