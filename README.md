@@ -44,7 +44,7 @@ Docker Services
 - Uptime Kuma
 - Portainer
 - Traefik (Version 2)
-
+> phpmyadmin + mysql
 
 Non Docker Services
 

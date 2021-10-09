@@ -1,23 +1,25 @@
-version: "3.4"
+version: "3.5"
 
 services:
   bitwarden:
-    image: bitwardenrs/server
+    image: vaultwarden/server
     env_file: /var/data/config/bitwarden/bitwarden.env
     volumes:
       - /var/data/bitwarden:/data/:rw
     networks:
-        - traefik_public
+      - my-network
+      - traefik_public
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.example.co.nz`)"
+        - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.example.com`)"
         - "traefik.http.services.bitwarden.loadbalancer.server.port=80"
         - "traefik.http.routers.bitwarden.service=bitwarden"
-        - "traefik.http.routers.bitwarden-websocket.rule=Host(`bitwarden.example.co.nz`) && Path(`/notifications/hub`)"
+        - "traefik.http.routers.bitwarden-websocket.rule=Host(`bitwarden.example.com`) && Path(`/notifications/hub`)"
         - "traefik.http.routers.bitwarden-websocket.service=bitwarden-websocket"
         - "traefik.http.services.bitwarden-websocket.loadbalancer.server.port=3012"
 
 networks:
+  my-network:
   traefik_public:
     external: true

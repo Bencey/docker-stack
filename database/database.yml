@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:5.7
+    env_file: /var/data/config/database/database.env
+    networks:
+      - my-network
+      - traefik_public
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/data/config/database/db:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    env_file: /var/data/config/database/database.env
+    networks:
+      - my-network
+      - traefik_public
+    depends_on:
+      - mysql
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.example.com`)"
+        - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+
+
+networks:
+  my-network:
+  traefik_public:
+    external: true
