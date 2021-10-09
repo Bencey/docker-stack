@@ -3,17 +3,10 @@ version: '3.4'
 services:
     archivebox:
         image: archivebox/archivebox
+        env_file: /var/data/config/archivebox/archivebox.env
         command: server --quick-init 0.0.0.0:8000
-#        ports:
-#            - 8000:8000
         networks:
           - traefik_public
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=Pacific/Auckland
-            - USE_COLOR=True
-            - SHOW_PROGRESS=False
         deploy:
           labels:
             - "traefik.enable=true"
