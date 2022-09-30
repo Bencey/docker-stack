@@ -17,7 +17,7 @@ All docker nodes are running as virtual machines with the following specs
 Ubuntu 20.04 Server
 10GB RAM
 20 Processors each (10 processors x 2 sockets)
-50GB Storage
+100GB Storage
 
 
 | Hostname     | IP            |
@@ -45,12 +45,15 @@ Docker Services
 - Portainer
 - Traefik (Version 2)
 > phpmyadmin + mysql
+> Paperless
+> Redis
 
 Non Docker Services
 
 - Grafana
 - Proxmox
 - Pihole
+- OpenVPN
 
 
 
